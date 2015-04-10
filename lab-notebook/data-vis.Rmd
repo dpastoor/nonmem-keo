@@ -1,0 +1,40 @@
+---
+title: "data-analysis"
+author: "Devin"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r normalize_path, include=F, eval=F}
+# FOR INTERACTIVE USE
+# set this so can normalize wd from Rstudio project and when knitting
+# eg if your rmd is in /lab-notebook/<notebook>.Rmd
+# it should look like setwd(paste0(getwd(), "/lab-notebook/"))
+setwd(paste0(getwd(), "/lab-notebook"))
+```
+
+```{r libraries}
+# required libraries
+library("PKPDmisc")
+library("ggplot2")
+library("tidyr")
+library("dplyr")
+```
+
+```{r readdata}
+dat <- read_nonmem("../modeling/all001")
+
+gdat <- dat %>% filter(ID ==1) %>%
+  select(ID, TIME, CMT, CONC) %>% gather(KEY, VALUE, CONC ) %>%
+   mutate(OBS = replace_values(as.character(CMT), data.frame(CMT = c(1, 2), values = c("COBS", "C")), as_numeric=F))
+```
+
+```{r}
+ggplot(gdat
+, aes(x = TIME, y = VALUE, color = OBS)) + geom_line(size = 1.5) + base_theme()
+```
+
+
+```{r}
+devtools::session_info()
+```

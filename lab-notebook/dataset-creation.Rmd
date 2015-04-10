@@ -1,0 +1,42 @@
+---
+title: "dataset-creation"
+author: "devin"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r normalize_path, include=F, eval=F}
+# FOR INTERACTIVE USE
+# set this so can normalize wd from Rstudio project and when knitting
+# eg if your rmd is in /lab-notebook/<notebook>.Rmd
+# it should look like setwd(paste0(getwd(), "/lab-notebook/"))
+setwd(paste0(getwd(), "/lab-notebook"))
+```
+
+```{r libraries}
+# required libraries
+library("PKPDmisc")
+library("dplyr")
+library("ggplot2")
+```
+
+```{r}
+# where to start analysis
+nmdat <- as_data_frame(expand.grid(ID = 1:2, TIME = seq(0, 24, 1), CMT = 1:2)) %>% arrange(ID, TIME)
+
+nmdat <- nmdat %>% mutate(DV = 0, 
+                          AMT = ifelse(CMT == 1 & TIME == 0, 1, 0), 
+                          TYPE = CMT)
+
+
+
+
+```
+
+```{r, eval=F}
+write_nonmem(nmdat, "../data/dat1.csv")
+```
+
+```{r}
+devtools::session_info()
+```
